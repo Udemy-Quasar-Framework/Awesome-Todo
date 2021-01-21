@@ -19,7 +19,7 @@
       </q-toolbar>
     </q-header>
 
-    <q-footer>
+    <q-footer id="my-footer">
       <q-tabs>
         <q-route-tab to="/" icon="list" label="Toto"></q-route-tab>
         <q-route-tab to="/settings" icon="settings_applications" label="Settings"></q-route-tab>
@@ -32,7 +32,6 @@
       bordered
       content-class="bg-grey-1"
       :breakpoint="768"
-      :behavior="drawerBehavior"
     >
       <q-list>
         <q-item-label
