@@ -19,20 +19,29 @@
       </q-toolbar>
     </q-header>
 
+    <q-footer>
+      <q-tabs>
+        <q-route-tab to="/" icon="list" label="Toto"></q-route-tab>
+        <q-route-tab to="/settings" icon="settings_applications" label="Settings"></q-route-tab>
+      </q-tabs>
+    </q-footer>
+
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
       bordered
       content-class="bg-grey-1"
+      :breakpoint="768"
+      :behavior="drawerBehavior"
     >
       <q-list>
         <q-item-label
           header
           class="text-grey-8"
         >
-          Essential Links
+          Navigation
         </q-item-label>
-        <EssentialLink
+        <LocalLink
           v-for="link in essentialLinks"
           :key="link.title"
           v-bind="link"
@@ -47,60 +56,37 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import LocalLink from 'components/LocalLink'
 
 const linksData = [
   {
-    title: 'Docs',
-    caption: 'quasar.dev',
-    icon: 'school',
-    link: 'https://quasar.dev'
+    title: 'Todo',
+    caption: 'Todo list',
+    icon: 'list',
+    link: '/',
+    exact: true
   },
   {
-    title: 'Github',
-    caption: 'github.com/quasarframework',
-    icon: 'code',
-    link: 'https://github.com/quasarframework'
-  },
-  {
-    title: 'Discord Chat Channel',
-    caption: 'chat.quasar.dev',
-    icon: 'chat',
-    link: 'https://chat.quasar.dev'
-  },
-  {
-    title: 'Forum',
-    caption: 'forum.quasar.dev',
-    icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
-  },
-  {
-    title: 'Twitter',
-    caption: '@quasarframework',
-    icon: 'rss_feed',
-    link: 'https://twitter.quasar.dev'
-  },
-  {
-    title: 'Facebook',
-    caption: '@QuasarFramework',
-    icon: 'public',
-    link: 'https://facebook.quasar.dev'
-  },
-  {
-    title: 'Quasar Awesome',
-    caption: 'Community Quasar projects',
-    icon: 'favorite',
-    link: 'https://awesome.quasar.dev'
+    title: 'Settings',
+    caption: 'Settings page',
+    icon: 'settings_applications',
+    link: '/settings',
+    exact: true
   }
 ]
 
 export default {
   name: 'MainLayout',
-  components: { EssentialLink },
+  components: { LocalLink },
   data () {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
+    }
+  },
+  computed: {
+    drawerBehavior () {
+      return this.$q.platform.is.mobile ? 'mobile' : 'desktop'
     }
   }
 }

@@ -1,14 +1,6 @@
 <template>
-  <q-item
-    clickable
-    tag="a"
-    target="_blank"
-    :href="link"
-  >
-    <q-item-section
-      v-if="icon"
-      avatar
-    >
+  <q-item clickable :to="link" :exact="exact">
+    <q-item-section avatar v-if="icon">
       <q-icon :name="icon"/>
     </q-item-section>
 
@@ -23,26 +15,27 @@
 
 <script>
 export default {
-  name: 'EssentialLink',
+  name: 'LocalLink',
   props: {
     title: {
       type: String,
       required: true
     },
-
     caption: {
       type: String,
       default: ''
     },
-
     link: {
       type: String,
       default: '#'
     },
-
     icon: {
       type: String,
       default: ''
+    },
+    exact: {
+      type: Boolean,
+      default: false
     }
   }
 }
