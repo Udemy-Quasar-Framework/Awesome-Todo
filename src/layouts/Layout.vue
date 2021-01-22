@@ -90,3 +90,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+@media screen  and (min-width: 768px) {
+  #my-footer {
+    display: none;
+  }
+}
+</style>
