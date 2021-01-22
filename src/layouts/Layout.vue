@@ -1,6 +1,6 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+  <q-layout view="hHh lpR fFf">
+    <q-header elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn
           flat
@@ -11,15 +11,13 @@
           @click="leftDrawerOpen = !leftDrawerOpen"
         />
 
-        <q-toolbar-title>
-          Awesome Todo App
+        <q-toolbar-title class="absolute-center">
+          Awesome Todo
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
-    <q-footer id="my-footer">
+    <q-footer id="my-footer" class="bg-primary text-white">
       <q-tabs>
         <q-route-tab to="/" icon="list" label="Toto"></q-route-tab>
         <q-route-tab to="/settings" icon="settings_applications" label="Settings"></q-route-tab>
@@ -30,14 +28,12 @@
       v-model="leftDrawerOpen"
       show-if-above
       bordered
-      content-class="bg-grey-1"
+      content-class="bg-primary"
       :breakpoint="768"
+      :width="250"
     >
-      <q-list>
-        <q-item-label
-          header
-          class="text-grey-8"
-        >
+      <q-list dark>
+        <q-item-label header class="text-white">
           Navigation
         </q-item-label>
         <LocalLink
@@ -60,14 +56,12 @@ import LocalLink from 'components/LocalLink'
 const linksData = [
   {
     title: 'Todo',
-    caption: 'Todo list',
     icon: 'list',
     link: '/',
     exact: true
   },
   {
     title: 'Settings',
-    caption: 'Settings page',
     icon: 'settings_applications',
     link: '/settings',
     exact: true
