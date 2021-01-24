@@ -7,7 +7,7 @@
       <q-checkbox v-model=" completedData"></q-checkbox>
     </q-item-section>
     <q-item-section>
-      <q-item-label>{{ name }}</q-item-label>
+      <q-item-label :class="[{'text-strikethrough': completedData}]">{{ name }}</q-item-label>
     </q-item-section>
     <q-item-section side>
       <div class="row">
@@ -74,5 +74,9 @@ export default {
 .q-item {
   border: $grey-6 solid 1px;
   margin: 5px 0;
+}
+
+.text-strikethrough {
+  text-decoration: line-through;
 }
 </style>
