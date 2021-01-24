@@ -2,10 +2,10 @@
   <q-page class="q-pa-md">
     <h4>Tasks Todo</h4>
     <q-list>
-      <TodoItem v-for="t in todoTasks"
+      <TodoItem v-for="t in tasks"
                 v-bind="t"
                 :key="t.id"
-                @complete-change="todoItemCompletedChange"
+                @complete-change="todoItemChecked"
       ></TodoItem>
     </q-list>
     <q-list>
@@ -13,7 +13,7 @@
       <TodoItem v-for="t in completedTasks"
                 v-bind="t"
                 :key="t.id"
-                @complete-change="todoItemCompletedChange"
+                @complete-change="todoItemUnchecked"
       ></TodoItem>
     </q-list>
   </q-page>
@@ -21,7 +21,7 @@
 
 <script>
 import TodoItem from 'components/TodoItem'
-import _ from 'lodash'
+import _ from 'lodash/array'
 
 const taskList = [
   {
@@ -53,21 +53,33 @@ export default {
     TodoItem
   },
   data: () => ({
-    tasks: taskList
+    tasks: taskList,
+    completedTasks: []
   }),
-  computed: {
-    todoTasks () {
-      return _.filter(this.tasks, (t) => !t.completed)
-    },
-    completedTasks () {
-      return _.filter(this.tasks, (t) => t.completed)
-    }
-  },
   methods: {
-    todoItemCompletedChange (event) {
-      const { id, completed } = event
+    todoItemChecked (event) {
+      const { id } = event
+
+      // delete from todos
       const index = _.findIndex(this.tasks, (x) => x.id === id)
-      this.tasks[index].completed = completed
+      const tArray = this.tasks.splice(index, 1)
+
+      // add in completed
+      if (tArray.length > 0) {
+        this.completedTasks.push({ ...event })
+      }
+    },
+    todoItemUnchecked (event) {
+      const { id } = event
+
+      // delete from completed
+      const index = _.findIndex(this.completedTasks, (x) => x.id === id)
+      const tArray = this.completedTasks.splice(index, 1)
+
+      // add in todos
+      if (tArray.length > 0) {
+        this.tasks.push({ ...event })
+      }
     }
   }
 }
