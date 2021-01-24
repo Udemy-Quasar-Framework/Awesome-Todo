@@ -48,8 +48,6 @@ export default {
      * */
     completedData () {
       if (this.mounted) {
-        console.log(this.mounted)
-
         const task = {
           id: this.id,
           name: this.name,
