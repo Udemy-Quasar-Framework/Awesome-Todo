@@ -1,3 +1,5 @@
+// TodoPage
+
 <template>
   <q-page class="q-pa-md">
     <h4>Tasks Todo</h4>
@@ -20,52 +22,32 @@
 </template>
 
 <script>
-import TodoItem from 'components/TodoItem'
 import _ from 'lodash'
-
-const taskList = [
-  {
-    id: 1,
-    name: 'Buy bananas',
-    completed: false,
-    dueDate: '01-22-2021',
-    dueTime: '10:20'
-  },
-  {
-    id: 2,
-    name: 'Buy beans',
-    completed: false,
-    dueDate: '01-22-2021',
-    dueTime: '10:20'
-  },
-  {
-    id: 3,
-    name: 'Buy apples',
-    completed: false,
-    dueDate: '01-22-2021',
-    dueTime: '10:20'
-  }
-]
+import { mapGetters, mapState } from 'vuex'
+import TodoItem from 'components/TodoItem'
+import { TASK_COMPLETED_TASKS, TASK_TODO_TASKS } from 'src/store/store_types/getters'
 
 export default {
   name: 'PageIndex',
   components: {
     TodoItem
   },
-  data: () => ({
-    tasks: taskList
-  }),
+  data: () => ({}),
   computed: {
-    todoTasks () {
-      return _.filter(this.tasks, (t) => !t.completed)
-    },
-    completedTasks () {
-      return _.filter(this.tasks, (t) => t.completed)
-    }
+    ...mapState({
+      tasks: (s) => s.task.tasks
+    }),
+    ...mapGetters({
+      todoTasks: TASK_TODO_TASKS,
+      completedTasks: TASK_COMPLETED_TASKS
+    })
   },
   methods: {
     todoItemCompletedChange (event) {
-      const { id, completed } = event
+      const {
+        id,
+        completed
+      } = event
       const index = _.findIndex(this.tasks, (x) => x.id === id)
       this.tasks[index].completed = completed
     }
