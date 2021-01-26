@@ -22,10 +22,10 @@
 </template>
 
 <script>
-import _ from 'lodash'
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import TodoItem from 'components/TodoItem'
 import { TASK_COMPLETED_TASKS, TASK_TODO_TASKS } from 'src/store/store_types/getters'
+import { TASK_COMPLETE_CHANGE } from 'src/store/store_types/actions'
 
 export default {
   name: 'PageIndex',
@@ -43,13 +43,18 @@ export default {
     })
   },
   methods: {
+    ...mapActions({
+      taskCompleteChange: TASK_COMPLETE_CHANGE
+    }),
     todoItemCompletedChange (event) {
       const {
         id,
         completed
       } = event
-      const index = _.findIndex(this.tasks, (x) => x.id === id)
-      this.tasks[index].completed = completed
+      this.taskCompleteChange({
+        id,
+        completed
+      })
     }
   }
 }
