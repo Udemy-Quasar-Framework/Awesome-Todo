@@ -26,13 +26,30 @@
         </div>
       </div>
     </q-item-section>
+    <q-item-section side>
+      <div class="flex">
+        <q-btn flat round dense
+               color="negative"
+               icon="delete"
+               @click.prevent.stop="prompToDelete(task.id)"
+        ></q-btn>
+        <q-btn flat round dense
+               color="secondary"
+               icon="edit"
+        ></q-btn>
+        <q-btn flat round dense
+               color="primary"
+               icon="add"
+        ></q-btn>
+      </div>
+    </q-item-section>
   </q-item>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 
-import { TASK_COMPLETE_CHANGE } from 'src/store/store_types/actions'
+import { TASK_COMPLETE_CHANGE, TASK_DELETE_TASK } from 'src/store/store_types/actions'
 
 export default {
   name: 'TodoItem',
@@ -46,8 +63,27 @@ export default {
   },
   methods: {
     ...mapActions({
-      taskCompleteChange: TASK_COMPLETE_CHANGE
-    })
+      taskCompleteChange: TASK_COMPLETE_CHANGE,
+      deleteTask: TASK_DELETE_TASK
+    }),
+    prompToDelete (taskId) {
+      this.$q.dialog({
+        title: 'Confirm',
+        message: 'Would you like to delete this task?',
+        ok: {
+          push: true,
+          label: 'Yes'
+        },
+        cancel: {
+          push: true,
+          label: 'No',
+          color: 'negative'
+        },
+        persistent: true
+      }).onOk(() => {
+        this.deleteTask({ id: taskId })
+      })
+    }
   }
   // data: () => ({
   //   mounted: false,
