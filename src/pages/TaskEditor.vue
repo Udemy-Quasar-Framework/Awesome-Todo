@@ -48,17 +48,20 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { TASK_ADD_EDIT_TASK } from 'src/store/store_types/actions'
+
 export default {
   name: 'TaskEditor',
   props: {
     visible: { type: Boolean },
-    id: { type: Number }
+    id: { type: String }
   },
   emits: ['editorCanceled', 'editorSaved'],
   data: () => ({
     title: 'Add Task',
     task: {
-      id: 0,
+      id: '',
       name: 'Task',
       completed: false,
       dueDate: '01-01-1999',
@@ -66,13 +69,12 @@ export default {
     }
   }),
   methods: {
+    ...mapActions({
+      addEditTask: TASK_ADD_EDIT_TASK
+    }),
     saveTask () {
       // save task into store
-      if (this.id) {
-        // edit task
-      } else {
-        // add task
-      }
+      this.addEditTask(this.task)
 
       // emit event
       this.$emit('editorSaved')
@@ -89,7 +91,7 @@ export default {
       } else if (newVal) {
         this.title = 'Add Task'
         this.task = {
-          id: 100,
+          id: null,
           name: '',
           completed: false,
           dueDate: '',

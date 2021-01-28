@@ -7,6 +7,7 @@
       <TodoItem v-for="t in todoTasks"
                 :task="t"
                 :key="t.id"
+                @edit-task="showTaskEditor(t.id)"
       ></TodoItem>
     </q-list>
     <q-list>
@@ -14,6 +15,7 @@
       <TodoItem v-for="t in completedTasks"
                 :task="t"
                 :key="t.id"
+                @edit-task="showTaskEditor(t.id)"
       ></TodoItem>
     </q-list>
 
@@ -24,13 +26,14 @@
              icon="add"
              size="24px"
              class="q-mb-sm"
-             @click="showAddTaskModal"
+             @click="showTaskEditor(null)"
       ></q-btn>
     </div>
 
     <TaskEditor :visible="addTaskModalVisible"
-                @editorSaved="hideAddTaskModal"
-                @editorCanceled="hideAddTaskModal"
+                :id="currentTaskId"
+                @editorSaved="hideTaskEditor"
+                @editorCanceled="hideTaskEditor"
     ></TaskEditor>
   </q-page>
 </template>
@@ -48,7 +51,8 @@ export default {
     TodoItem
   },
   data: () => ({
-    addTaskModalVisible: true
+    addTaskModalVisible: false,
+    currentTaskId: null
   }),
   computed: {
     ...mapGetters({
@@ -57,10 +61,11 @@ export default {
     })
   },
   methods: {
-    showAddTaskModal () {
+    showTaskEditor (id) {
+      this.currentTaskId = id
       this.addTaskModalVisible = true
     },
-    hideAddTaskModal () {
+    hideTaskEditor () {
       this.addTaskModalVisible = false
     }
   }

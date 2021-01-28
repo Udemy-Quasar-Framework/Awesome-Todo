@@ -36,11 +36,7 @@
         <q-btn flat round dense
                color="secondary"
                icon="edit"
-               @click.stop="promptToEdit"
-        ></q-btn>
-        <q-btn flat round dense
-               color="primary"
-               icon="add"
+               @click.stop="editTask"
         ></q-btn>
       </div>
     </q-item-section>
@@ -85,8 +81,8 @@ export default {
         this.deleteTask({ id: this.task.id })
       })
     },
-    promptToEdit () {
-      this.$router.push({ name: 'edit_task', params: { taskId: this.task.id } })
+    editTask () {
+      this.$emit('edit-task', this.task.id)
     }
   }
   // data: () => ({
