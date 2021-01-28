@@ -48,8 +48,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { TASK_ADD_EDIT_TASK } from 'src/store/store_types/actions'
+import { TASK_GET_TASK_BY_ID } from 'src/store/store_types/getters'
 
 export default {
   name: 'TaskEditor',
@@ -68,6 +69,11 @@ export default {
       dueTime: '01:01'
     }
   }),
+  computed: {
+    ...mapGetters({
+      getTaskById: TASK_GET_TASK_BY_ID
+    })
+  },
   methods: {
     ...mapActions({
       addEditTask: TASK_ADD_EDIT_TASK
@@ -88,6 +94,9 @@ export default {
       if (newVal && this.id) {
         console.log('TaskId: ', this.id)
         this.title = 'Edit Task'
+
+        // find the task
+        this.task = { ...this.getTaskById({ id: this.id }) }
       } else if (newVal) {
         this.title = 'Add Task'
         this.task = {
