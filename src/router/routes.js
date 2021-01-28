@@ -3,8 +3,9 @@ const routes = [
     path: '/',
     component: () => import('layouts/Layout.vue'),
     children: [
-      { path: '', component: () => import('pages/TodoPage.vue') },
-      { path: '/settings', component: () => import('pages/Settings.vue') }
+      { name: 'todoList', path: '', component: () => import('pages/TodoPage.vue') },
+      { name: 'settings', path: '/settings', component: () => import('pages/Settings.vue') },
+      { name: 'edit_task', path: '/edit_task/:taskId', component: () => import('pages/EditTask.vue'), props: true }
     ]
   },
 

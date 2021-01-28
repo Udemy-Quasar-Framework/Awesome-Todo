@@ -4,11 +4,6 @@
   <q-page class="q-pa-md">
     <h4>Tasks Todo</h4>
     <q-list>
-      <!--      <TodoItem v-for="t in todoTasks"-->
-      <!--                v-bind="t"-->
-      <!--                :key="t.id"-->
-      <!--                @complete-change="todoItemCompletedChange"-->
-      <!--      ></TodoItem>-->
       <TodoItem v-for="t in todoTasks"
                 :task="t"
                 :key="t.id"
@@ -16,54 +11,58 @@
     </q-list>
     <q-list>
       <h4>Tasks Completed</h4>
-      <!--      <TodoItem v-for="t in completedTasks"-->
-      <!--                v-bind="t"-->
-      <!--                :key="t.id"-->
-      <!--                @complete-change="todoItemCompletedChange"-->
-      <!--      ></TodoItem>-->
       <TodoItem v-for="t in completedTasks"
                 :task="t"
                 :key="t.id"
       ></TodoItem>
     </q-list>
+
+    <div class="absolute-bottom text-center">
+      <q-btn round
+             dense
+             color="primary"
+             icon="add"
+             size="24px"
+             class="q-mb-sm"
+             @click="showAddTaskModal"
+      ></q-btn>
+    </div>
+
+    <TaskEditor :visible="addTaskModalVisible"
+                @editorSaved="hideAddTaskModal"
+                @editorCanceled="hideAddTaskModal"
+    ></TaskEditor>
   </q-page>
 </template>
 
 <script>
-import { mapGetters /* , mapState, mapActions */ } from 'vuex'
+import { mapGetters } from 'vuex'
 import TodoItem from 'components/TodoItem'
 import { TASK_COMPLETED_TASKS, TASK_TODO_TASKS } from 'src/store/store_types/getters'
-// import { TASK_COMPLETE_CHANGE } from 'src/store/store_types/actions'
+import TaskEditor from 'pages/TaskEditor'
 
 export default {
   name: 'PageIndex',
   components: {
+    TaskEditor,
     TodoItem
   },
-  data: () => ({}),
+  data: () => ({
+    addTaskModalVisible: true
+  }),
   computed: {
-    // ...mapState({
-    //   tasks: (s) => s.task.tasks
-    // }),
     ...mapGetters({
       todoTasks: TASK_TODO_TASKS,
       completedTasks: TASK_COMPLETED_TASKS
     })
+  },
+  methods: {
+    showAddTaskModal () {
+      this.addTaskModalVisible = true
+    },
+    hideAddTaskModal () {
+      this.addTaskModalVisible = false
+    }
   }
-  // methods: {
-  // ...mapActions({
-  //   taskCompleteChange: TASK_COMPLETE_CHANGE
-  // }),
-  // todoItemCompletedChange (event) {
-  //   const {
-  //     id,
-  //     completed
-  //   } = event
-  //   this.taskCompleteChange({
-  //     id,
-  //     completed
-  //   })
-  // }
-  // }
 }
 </script>

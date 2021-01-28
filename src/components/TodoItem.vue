@@ -31,11 +31,12 @@
         <q-btn flat round dense
                color="negative"
                icon="delete"
-               @click.prevent.stop="prompToDelete(task.id)"
+               @click.prevent.stop="promptToDelete"
         ></q-btn>
         <q-btn flat round dense
                color="secondary"
                icon="edit"
+               @click.stop="promptToEdit"
         ></q-btn>
         <q-btn flat round dense
                color="primary"
@@ -66,7 +67,7 @@ export default {
       taskCompleteChange: TASK_COMPLETE_CHANGE,
       deleteTask: TASK_DELETE_TASK
     }),
-    prompToDelete (taskId) {
+    promptToDelete () {
       this.$q.dialog({
         title: 'Confirm',
         message: 'Would you like to delete this task?',
@@ -81,8 +82,11 @@ export default {
         },
         persistent: true
       }).onOk(() => {
-        this.deleteTask({ id: taskId })
+        this.deleteTask({ id: this.task.id })
       })
+    },
+    promptToEdit () {
+      this.$router.push({ name: 'edit_task', params: { taskId: this.task.id } })
     }
   }
   // data: () => ({
