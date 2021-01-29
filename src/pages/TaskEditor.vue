@@ -7,9 +7,24 @@
 
       <q-card-section class="q-pt-none">
         <q-form>
-          <q-input outlined label="Task" v-model="task.name" :rules="[val=>!!val]"></q-input>
+          <q-input outlined
+                   label="Task"
+                   v-model="$v.name.$model"
+                   :error="$v.name.$error"
+                   error-message="Field required"
+          ></q-input>
 
-          <q-input outlined v-model="task.dueDate" mask="date" :rules="['date']">
+          <ValidationProvider v-slot="v" name="Task" rules="vRequired">
+            <q-input outlined
+                     label="Task"
+                     v-model="task.name"
+                     :error="v.errors.length > 0"
+                     :error-message="v.errors[0]"
+            ></q-input>
+          </ValidationProvider>
+
+          <q-input outlined v-model="task.dueDate" mask="date"
+                   :rules="['date' || 'Invalid date']">
             <template v-slot:append>
               <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
@@ -49,11 +64,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import { required } from 'vuelidate/lib/validators'
+import { ValidationProvider, extend } from 'vee-validate'
+import * as vRules from 'vee-validate/dist/rules'
 import { TASK_ADD_EDIT_TASK } from 'src/store/store_types/actions'
 import { TASK_GET_TASK_BY_ID } from 'src/store/store_types/getters'
 
+extend('vRequired', vRules.required)
+
 export default {
   name: 'TaskEditor',
+  components: {
+    ValidationProvider
+  },
   props: {
     visible: { type: Boolean },
     id: { type: String }
@@ -67,8 +90,14 @@ export default {
       completed: false,
       dueDate: '01-01-1999',
       dueTime: '01:01'
-    }
+    },
+    name: 'My Task'
   }),
+  validations: {
+    name: {
+      required
+    }
+  },
   computed: {
     ...mapGetters({
       getTaskById: TASK_GET_TASK_BY_ID
