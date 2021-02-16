@@ -6,52 +6,60 @@
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <q-form>
-          <q-input outlined
-                   label="Task"
-                   v-model="$v.name.$model"
-                   :error="$v.name.$error"
-                   error-message="Field required"
-          ></q-input>
+        <ValidationObserver v-slot="{handleSubmit}">
+          <q-form @submit.stop="handleSubmit(saveTask)">
+            <ValidationProvider v-slot="v" name="Task" rules="required">
+              <q-input outlined
+                       label="Task"
+                       v-model="task.name"
+                       :error="v.errors.length > 0"
+                       :error-message="v.errors[0]"
+              ></q-input>
+            </ValidationProvider>
 
-          <ValidationProvider v-slot="v" name="Task" rules="vRequired">
-            <q-input outlined
-                     label="Task"
-                     v-model="task.name"
-                     :error="v.errors.length > 0"
-                     :error-message="v.errors[0]"
-            ></q-input>
-          </ValidationProvider>
+            <ValidationProvider v-slot="v" name="Due Date" rules="required|dueDate">
+              <q-input outlined
+                       v-model="task.dueDate"
+                       mask="date"
+                       :error="v.errors.length > 0"
+                       :error-message="v.errors[0]"
+              >
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
+                      <q-date v-model="task.dueDate" landscape>
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat/>
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </ValidationProvider>
 
-          <q-input outlined v-model="task.dueDate" mask="date"
-                   :rules="['date' || 'Invalid date']">
-            <template v-slot:append>
-              <q-icon name="event" class="cursor-pointer">
-                <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                  <q-date v-model="task.dueDate" landscape>
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat/>
-                    </div>
-                  </q-date>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-
-          <q-input outlined v-model="task.dueTime" mask="time" :rules="['time']">
-            <template v-slot:append>
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy transition-show="scale" transition-hide="scale">
-                  <q-time v-model="task.dueTime" landscape>
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat/>
-                    </div>
-                  </q-time>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </q-form>
+            <ValidationProvider v-slot="v" name="Due Time" rules="required|dueTime">
+              <q-input outlined
+                       v-model="task.dueTime"
+                       mask="time"
+                       :error="v.errors.length > 0"
+                       :error-message="v.errors[0]"
+              >
+                <template v-slot:append>
+                  <q-icon name="access_time" class="cursor-pointer">
+                    <q-popup-proxy transition-show="scale" transition-hide="scale">
+                      <q-time v-model="task.dueTime" landscape>
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat/>
+                        </div>
+                      </q-time>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </ValidationProvider>
+          </q-form>
+        </ValidationObserver>
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
@@ -64,18 +72,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { required } from 'vuelidate/lib/validators'
-import { ValidationProvider, extend } from 'vee-validate'
-import * as vRules from 'vee-validate/dist/rules'
 import { TASK_ADD_EDIT_TASK } from 'src/store/store_types/actions'
 import { TASK_GET_TASK_BY_ID } from 'src/store/store_types/getters'
-
-extend('vRequired', vRules.required)
 
 export default {
   name: 'TaskEditor',
   components: {
-    ValidationProvider
   },
   props: {
     visible: { type: Boolean },
@@ -93,11 +95,6 @@ export default {
     },
     name: 'My Task'
   }),
-  validations: {
-    name: {
-      required
-    }
-  },
   computed: {
     ...mapGetters({
       getTaskById: TASK_GET_TASK_BY_ID
