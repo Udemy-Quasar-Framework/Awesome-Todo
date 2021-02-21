@@ -5,7 +5,8 @@ const routes = [
     children: [
       { name: 'todoList', path: '', component: () => import('pages/TodoPage.vue') },
       { name: 'settings', path: '/settings', component: () => import('pages/Settings.vue') },
-      { name: 'edit_task', path: '/edit_task/:taskId', component: () => import('pages/EditTask.vue'), props: true }
+      { name: 'edit_task', path: '/edit_task/:taskId', component: () => import('pages/EditTask.vue'), props: true },
+      { name: 'authPage', path: '/auth', component: () => import('pages/AuthPage.vue') }
     ]
   },
 

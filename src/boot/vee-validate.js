@@ -1,12 +1,5 @@
-import {
-  extend,
-  ValidationObserver,
-  ValidationProvider
-} from 'vee-validate'
-import {
-  required,
-  regex
-} from 'vee-validate/dist/rules'
+import { extend, ValidationObserver, ValidationProvider } from 'vee-validate'
+import { confirmed, email, regex, required } from 'vee-validate/dist/rules'
 import moment from 'moment'
 
 export default async ({ Vue }) => {
@@ -17,7 +10,13 @@ export default async ({ Vue }) => {
 
 // Add build-in rules
 extend('required', required)
+extend('email', email)
 extend('regex', regex)
+
+extend('confirmed', {
+  ...confirmed,
+  message: '{_field_} do not match'
+})
 
 // Add custom rule
 extend('dueDate', {
