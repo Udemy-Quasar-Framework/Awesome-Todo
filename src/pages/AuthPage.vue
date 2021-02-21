@@ -18,11 +18,11 @@
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="login">
-          <div class="text-h6">Login</div>
+          <LoginRegisterComponent :mode="tab"></LoginRegisterComponent>
         </q-tab-panel>
 
         <q-tab-panel name="register">
-          <RegisterComponent></RegisterComponent>
+          <LoginRegisterComponent :mode="tab"></LoginRegisterComponent>
         </q-tab-panel>
       </q-tab-panels>
     </q-card>
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import RegisterComponent from 'components/RegisterComponent'
+import LoginRegisterComponent from 'components/LoginRegisterComponent'
 
 export default {
   name: 'AuthPage',
-  components: { RegisterComponent },
+  components: { LoginRegisterComponent },
   data: () => ({
     tab: 'login'
   })

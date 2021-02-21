@@ -5,12 +5,12 @@
         <template v-slot:avatar>
           <q-icon name="account_circle" color="primary"/>
         </template>
-        Register to access your Todos anywhere!
+        <span>{{ title }}</span>
       </q-banner>
 
       <ValidationProvider name="Email" v-slot="{errors}" rules="required|email">
         <q-input outlined v-model="email" label="Email" class="q-mb-md" :error="errors.length > 0"
-                 :error-message="errors[0]" @input="test(errors)"></q-input>
+                 :error-message="errors[0]"></q-input>
       </ValidationProvider>
       <ValidationProvider name="Password" v-slot="{errors}" vid="passwordConfirm" rules="required">
         <q-input outlined :type="passwordType" v-model="password" label="Password" class="q-mb-md"
@@ -25,7 +25,8 @@
           </template>
         </q-input>
       </ValidationProvider>
-      <ValidationProvider name="Confirm Password" v-slot="{errors}" rules="required|confirmed:passwordConfirm">
+      <ValidationProvider name="Confirm Password" v-slot="{errors}" rules="required|confirmed:passwordConfirm"
+                          v-if="isRegisterMode">
         <q-input outlined :type="passwordType" v-model="passwordConfirm" label="Confirm Password" class=""
                  :error="errors.length > 0"
                  :error-message="errors[0]">
@@ -41,7 +42,7 @@
 
       <div class="row">
         <q-space></q-space>
-        <q-btn type="submit" :loading="submitting" label="Register" class="q-mt-md" color="teal">
+        <q-btn type="submit" :loading="submitting" :label="mode" class="q-mt-md" color="teal">
           <template v-slot:loading>
             <q-spinner-puff/>
           </template>
@@ -54,7 +55,9 @@
 <script>
 
 export default {
-  name: 'Register',
+  props: [
+    'mode'
+  ],
   data () {
     return {
       email: '',
@@ -65,6 +68,14 @@ export default {
     }
   },
   computed: {
+    title () {
+      return this.mode === 'login'
+        ? 'Login to access your Todos anywhere!'
+        : 'Register to access your Todos anywhere!'
+    },
+    isRegisterMode () {
+      return this.mode === 'register'
+    },
     passwordType () {
       return this.isPassword ? 'password' : 'text'
     }
@@ -74,7 +85,11 @@ export default {
       this.submitting = true
       setTimeout(() => {
         this.submitting = false
-        console.log('Form submitted')
+        if (this.isRegisterMode) {
+          console.log('Register form submitted')
+        } else {
+          console.log('Login form submitted')
+        }
       }, 2000)
     }
   }
