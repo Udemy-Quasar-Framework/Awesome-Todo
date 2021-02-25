@@ -53,6 +53,7 @@
 </template>
 
 <script>
+// import axios from 'axios'
 
 export default {
   props: [
@@ -83,14 +84,11 @@ export default {
   methods: {
     onSubmit () {
       this.submitting = true
-      setTimeout(() => {
-        this.submitting = false
-        if (this.isRegisterMode) {
-          console.log('Register form submitted')
-        } else {
-          console.log('Login form submitted')
-        }
-      }, 2000)
+      if (this.isRegisterMode) {
+        console.log('Register form submitted')
+      } else {
+        // axios.post('local')
+      }
     }
   }
 }

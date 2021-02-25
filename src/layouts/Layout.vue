@@ -15,7 +15,10 @@
           Awesome Todo
         </q-toolbar-title>
 
-        <q-btn to="/auth" flat icon-right="account_circle" label="Login" class="absolute-right"/>
+        <q-btn v-if="isAuthenticated" @click="logoutUser" flat icon-right="account_circle" label="Logout"
+               class="absolute-right"/>
+        <q-btn v-else to="/auth" flat icon-right="account_circle" label="Login"
+               class="absolute-right"/>
       </q-toolbar>
     </q-header>
 
@@ -53,6 +56,8 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import { AUTH_LOGOUT_USER } from '../store/store_types/actions'
 import LocalLink from 'components/LocalLink'
 
 const linksData = [
@@ -80,9 +85,17 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isAuthenticated: state => state.isAuthenticated
+    }),
     drawerBehavior () {
       return this.$q.platform.is.mobile ? 'mobile' : 'desktop'
     }
+  },
+  methods: {
+    ...mapActions({
+      logoutUser: AUTH_LOGOUT_USER
+    })
   }
 }
 </script>
