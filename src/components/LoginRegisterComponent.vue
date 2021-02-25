@@ -87,7 +87,18 @@ export default {
       if (this.isRegisterMode) {
         console.log('Register form submitted')
       } else {
-        // axios.post('local')
+        // api call to login the user
+        this.$http({
+          method: 'post',
+          url: 'auth/login',
+          data: { email: this.email, password: this.password }
+        }).then((res) => {
+          console.log(res)
+          this.submitting = false
+        }).catch((err) => {
+          console.log(err)
+          this.submitting = false
+        })
       }
     }
   }
